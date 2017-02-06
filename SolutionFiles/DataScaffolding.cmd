@@ -1,0 +1,1 @@
+dotnet ef DbContext Scaffold "Data Source=????;Initial Catalog=????;Persist Security Info=True;User ID=????;Password=????" Microsoft.EntityFrameworkCore.SqlServer --context PubsDbContext --output-dir "Entities" --force --data-annotations
