@@ -2,7 +2,8 @@ yo aspnet console PubsConsoleApp --version-current
 yo aspnet classlib Pubs.Data --version-current
 yo aspnet classlib Pubs.DTO --version-current
 yo aspnet classlib Pubs.Repository --version-current
-yo aspnet mstest Pubs.Data.Test --version-current
+REM yo aspnet mstest Pubs.Data.Test --version-current
+yo aspnet xunit Pubs.Data.Test.xUnit --version-current
 yo aspnet webapi Pubs.Api --version-current
 yo aspnet mvc Pubs.Mvc bootstrap --version-current
 yo aspnet web Pubs.Web bootstrap --version-current

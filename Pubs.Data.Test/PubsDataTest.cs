@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Pubs.Data.Test
 {
     [TestClass]
-    public class UnitTest1
+    public class PubsDataTest
     {
         [TestMethod]
         public void TestMethod1()
