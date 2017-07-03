@@ -17,6 +17,9 @@ namespace Pubs.Data.Entities
         public virtual DbSet<PubsTitles> PubsTitles { get; set; }
         public virtual DbSet<Sysdiagrams> Sysdiagrams { get; set; }
 
+        public PubsDbContext(DbContextOptions options) : base(options) { }
+        public PubsDbContext() : base() { }
+
         // Unable to generate entity type for table 'dbo.pubs_discounts'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.pubs_roysched'. Please see the warning messages.
 
@@ -24,8 +27,6 @@ namespace Pubs.Data.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Data Source=spg.database.windows.net;Initial Catalog=spguy;Persist Security Info=True;User ID=SharePointGuy;Password=PaxChristi32");
             }
         }
 
