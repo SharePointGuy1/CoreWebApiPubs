@@ -18,19 +18,16 @@ namespace Pubs.Data.Test.xUnit {
         protected string _newStoreName = "New Store";
         #endregion protected fields
 
-        public StoresTest (ITestOutputHelper output) {
-            var builder = new ConfigurationBuilder ()
-                .SetBasePath (Directory.GetCurrentDirectory ())
-                .AddJsonFile ("appsettings.json")
-                .AddEnvironmentVariables ();
-            builder.Build ();
-            Configuration = builder.Build ();
+        public StoresTest (ITestOutputHelper output)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables();
+            builder.Build();
+            Configuration = builder.Build();
 
-            string connection = Configuration.GetSection ("ConnectionStrings").GetValue<string> ("Sample");
-            // Console.WriteLine("\nConnection is: {0}\n", connection);
-            DbContextOptions contextOptions = new DbContextOptionsBuilder ().UseSqlServer (connection).Options;
-            _context = new PubsDbContext (contextOptions);
-
+            LoadContext();
             _pubsStores = _context.PubsStores;
         }
 
@@ -72,8 +69,10 @@ namespace Pubs.Data.Test.xUnit {
             _pubsStores.Add (newStore);
             // Console.WriteLine(string.Format("New Store id is '{0}'", newStore.StorId));
 
-            _context.Add<PubsStores> (newStore);
+            _context.Add(newStore);
             _context.SaveChanges ();
+            // reload context to make sure we are getting the most recent data from database
+            LoadContext();
             var _pubsStores2 = _context.PubsStores;
             // Console.WriteLine("There are now {0} stores", _pubsStores.Count());
 
@@ -84,7 +83,6 @@ namespace Pubs.Data.Test.xUnit {
         [Fact]
         public void RemoveStores () {
             // Console.WriteLine("Begin RemoveStores");
-
             int oldStoresCount = _pubsStores.Count<PubsStores> (s => s.StorName != _newStoreName);
             int newStoresCount = _pubsStores.Count<PubsStores> (s => s.StorName == _newStoreName);
             // Console.Write("\nThere are {0} old stores and {1} new stores\n",
@@ -94,6 +92,7 @@ namespace Pubs.Data.Test.xUnit {
             _pubsStores.RemoveRange (newStores);
             _context.SaveChanges ();
 
+            LoadContext();
             var pubsStores2 = _context.PubsStores;
             Assert.Equal (oldStoresCount, pubsStores2.Count<PubsStores> ());
 
@@ -107,6 +106,14 @@ namespace Pubs.Data.Test.xUnit {
             random.Next (2222, 9999);
             var storeId = random.Next ().ToString ().Substring (0, 4);
             return storeId;
+        }
+
+        private void LoadContext()
+        {
+            string connection = Configuration.GetSection("ConnectionStrings").GetValue<string>("Sample");
+            // Console.WriteLine("\nConnection is: {0}\n", connection);
+            DbContextOptions contextOptions = new DbContextOptionsBuilder().UseSqlServer(connection).Options;
+            _context = new PubsDbContext(contextOptions);
         }
         #endregion helper methods
     }
